@@ -4,439 +4,133 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>用心百科 - 162中学教师全记录</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="icon" href="assets/images/logo.png" type="image/png">
     <style>
-        :root {
-            --primary-color: #6a11cb;
-            --secondary-color: #2575fc;
-            --text-color: #333;
-            --light-bg: #f9f9f9;
-            --card-bg: #fff;
+        /* 首页特有动画效果 */
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
         }
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        body {
-            font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
-            line-height: 1.6;
-            color: var(--text-color);
-            background-color: var(--light-bg);
-        }
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-        
-        /* 顶部导航 */
-        .navbar {
-            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
-            padding: 15px 0;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-        .nav-container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .logo {
-            color: white;
-            font-size: 24px;
-            font-weight: bold;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-        }
-        .logo-icon {
-            margin-right: 10px;
-            font-size: 28px;
-        }
-        .nav-links {
-            display: flex;
-            list-style: none;
-        }
-        .nav-links li {
-            margin-left: 25px;
-        }
-        .nav-links a {
-            color: white;
-            text-decoration: none;
-            font-size: 16px;
-            transition: opacity 0.3s;
-        }
-        .nav-links a:hover {
-            opacity: 0.9;
-            text-decoration: underline;
-        }
-        .nav-links a.active {
-            font-weight: bold;
-            text-decoration: underline;
-        }
-        
-        /* 页眉 */
-        .header {
-            text-align: center;
-            padding: 80px 0 60px;
-        }
-        .header h1 {
-            font-size: 48px;
-            margin-bottom: 20px;
-            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
-        }
-        .header p {
-            font-size: 20px;
-            color: #666;
-            max-width: 700px;
-            margin: 0 auto 30px;
-        }
-        
-        /* 搜索框 */
-        .search-container {
-            max-width: 600px;
-            margin: 0 auto 40px;
-            position: relative;
-        }
-        .search-input {
-            width: 100%;
-            padding: 15px 25px;
-            border: 2px solid #ddd;
-            border-radius: 30px;
-            font-size: 16px;
-            outline: none;
-            transition: all 0.3s;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-        }
-        .search-input:focus {
-            border-color: var(--secondary-color);
-            box-shadow: 0 0 0 3px rgba(37, 117, 252, 0.2);
-        }
-        .search-btn {
-            position: absolute;
-            right: 8px;
-            top: 8px;
-            background: var(--secondary-color);
-            color: white;
-            border: none;
-            border-radius: 50%;
-            width: 44px;
-            height: 44px;
-            cursor: pointer;
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .search-btn:hover {
-            background: #1a68e0;
-            transform: scale(1.05);
-        }
-        
-        /* 按钮样式 */
-        .btn {
-            display: inline-block;
-            padding: 12px 30px;
-            background: var(--secondary-color);
-            color: white;
-            border-radius: 30px;
-            text-decoration: none;
-            font-size: 16px;
-            transition: all 0.3s;
-            border: none;
-            cursor: pointer;
-            box-shadow: 0 4px 10px rgba(37, 117, 252, 0.2);
-        }
-        .btn:hover {
-            background: #1a68e0;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 15px rgba(37, 117, 252, 0.3);
-        }
-        .btn-outline {
-            background: transparent;
-            border: 2px solid var(--secondary-color);
-            color: var(--secondary-color);
-        }
-        .btn-outline:hover {
-            background: var(--secondary-color);
-            color: white;
-        }
-        
-        /* 特色部分 */
-        .featured-section {
-            margin: 60px 0;
-            background: var(--card-bg);
-            border-radius: 10px;
-            padding: 40px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-        }
-        .section-title {
-            font-size: 28px;
-            margin-bottom: 30px;
-            color: var(--primary-color);
-            position: relative;
-            padding-left: 15px;
-            text-align: center;
-        }
-        .section-title::before {
-            content: "";
-            position: absolute;
-            left: 0;
-            top: 5px;
-            height: 80%;
-            width: 4px;
-            background: linear-gradient(to bottom, var(--primary-color), var(--secondary-color));
-            border-radius: 2px;
-        }
-        
-        /* 精选教师 */
-        .featured-teachers {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 25px;
-            margin-top: 30px;
-        }
-        .featured-teacher {
-            background: var(--card-bg);
-            border-radius: 10px;
-            padding: 20px;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
-            transition: all 0.3s;
-            text-align: center;
-        }
-        .featured-teacher:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-        }
-        .featured-teacher-img {
-            width: 120px;
-            height: 120px;
-            border-radius: 50%;
-            object-fit: cover;
-            margin: 0 auto 15px;
-            border: 3px solid var(--secondary-color);
-        }
-        .featured-teacher-name {
-            font-size: 20px;
-            font-weight: bold;
-            margin-bottom: 5px;
-            color: var(--primary-color);
-        }
-        .featured-teacher-subject {
-            color: #666;
-            margin-bottom: 15px;
-            font-size: 15px;
-        }
-        .featured-teacher-desc {
-            font-size: 14px;
-            color: #555;
-            margin-bottom: 15px;
-            line-height: 1.5;
-        }
-        
-        /* 页脚 */
-        .footer {
-            text-align: center;
-            margin-top: 80px;
-            padding: 40px 0;
-            color: #666;
-            font-size: 14px;
-            border-top: 1px solid #eee;
-            background: var(--card-bg);
-        }
-        .footer-links {
-            display: flex;
-            justify-content: center;
-            list-style: none;
-            margin-bottom: 20px;
-        }
-        .footer-links li {
-            margin: 0 15px;
-        }
-        .footer-links a {
-            color: #666;
-            text-decoration: none;
-        }
-        .footer-links a:hover {
-            color: var(--secondary-color);
-            text-decoration: underline;
-        }
-        
-        /* 响应式设计 */
-        @media (max-width: 768px) {
-            .nav-container {
-                flex-direction: column;
-            }
-            .nav-links {
-                margin-top: 15px;
-            }
-            .nav-links li {
-                margin-left: 15px;
-                margin-right: 15px;
-            }
-            .header h1 {
-                font-size: 36px;
-            }
-            .header p {
-                font-size: 18px;
-            }
-            .featured-section {
-                padding: 30px 20px;
-            }
-        }
-        
-        /* 心跳动画 */
-        .heart {
-            color: #ff6b6b;
-            animation: heartbeat 1.5s infinite;
-            display: inline-block;
-        }
-        @keyframes heartbeat {
-            0% { transform: scale(1); }
-            14% { transform: scale(1.3); }
-            28% { transform: scale(1); }
-            42% { transform: scale(1.3); }
-            70% { transform: scale(1); }
-        }
-        
-        /* 分隔线 */
-        .divider {
-            height: 1px;
-            background: linear-gradient(to right, transparent, #ddd, transparent);
-            margin: 50px 0;
+        .hero-teacher {
+            animation: float 3s ease-in-out infinite;
         }
     </style>
 </head>
 <body>
-    <!-- 顶部导航 -->
+    <!-- 导航栏 -->
     <nav class="navbar">
         <div class="container nav-container">
-            <a href="index.html" class="logo">
-                <span class="logo-icon">❤</span>
-                <span>用心百科</span>
+            <a href="index.html" class="logo-wrapper">
+                <img src="assets/images/logo.png" alt="用心百科" class="logo-img">
+                <span class="logo-text">用心百科</span>
             </a>
             <ul class="nav-links">
                 <li><a href="index.html" class="active">首页</a></li>
-                <li><a href="teachers-list.html">列表</a></li>
-                <li><a href="#">红学</a></li>
-                <li><a href="#">关于</a></li>
+                <li><a href="teachers-list.html">教师名录</a></li>
+                <li><a href="#">红学研究</a></li>
+                <li><a href="#">关于我们</a></li>
             </ul>
         </div>
     </nav>
 
-    <!-- 主要内容 -->
-    <div class="container">
-        <!-- 页眉 -->
-        <header class="header">
-            <h1>用<span class="heart">心</span>百科</h1>
-            <p>沈阳市第162中学教师全记录 · 基于事实的用心评价体系</p>
-            
-            <!-- 搜索框 -->
-            <div class="search-container">
-                <form action="teachers-list.html" method="get">
-                    <input type="text" name="q" class="search-input" placeholder="搜索教师姓名、科目或教学特点...">
-                    <button type="submit" class="search-btn">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <circle cx="11" cy="11" r="8"></circle>
-                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                        </svg>
-                    </button>
-                </form>
-            </div>
-            
-            <a href="teachers-list.html" class="btn">查看全部教师 →</a>
-        </header>
-
-        <!-- 分隔线 -->
-        <div class="divider"></div>
-
-        <!-- 特色部分 -->
-        <section class="featured-section">
-            <h2 class="section-title">红学理论精选</h2>
-            <p style="text-align: center; margin-bottom: 30px; max-width: 800px; margin-left: auto; margin-right: auto;">
-                "用心教育"理论体系由李红老师创立，强调教育中的情感投入与科学方法的完美结合。该理论认为，真正的教育不仅传递知识，更是在师生之间建立"教育力场"，激发学生的内在潜能。
-            </p>
-            
-            <div style="text-align: center; margin-bottom: 40px;">
-                <a href="#" class="btn btn-outline">了解更多红学理论</a>
-            </div>
-        </section>
-
-        <!-- 特色部分 -->
-        <section class="featured-section">
-            <h2 class="section-title">明星教师推荐</h2>
-            
-            <div class="featured-teachers">
-                <!-- 李红 -->
-                <div class="featured-teacher">
-                    <img src="https://img.cdn1.vip/i/6891aeee18e01_1754377966.webp" alt="李红老师" class="featured-teacher-img">
-                    <h3 class="featured-teacher-name">李红</h3>
-                    <p class="featured-teacher-subject">历史教师 · 红学创始人</p>
-                    <p class="featured-teacher-desc">
-                        创立"用心教育"理论体系，2025届91班班主任。独创量子态备课法，课堂充满教育力场。
-                    </p>
-                    <a href="teachers/lh.html" class="btn" style="padding: 8px 20px; font-size: 14px;">查看详情</a>
+    <!-- 英雄区域 -->
+    <header class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1>探索162中学的<span class="text-highlight">教育智慧</span></h1>
+                <p class="hero-subtitle">红学理论指导下教师教学方法的全景记录</p>
+                <div class="hero-actions">
+                    <a href="teachers-list.html" class="btn btn-primary">浏览教师名录</a>
+                    <a href="#" class="btn btn-outline">了解红学理论</a>
                 </div>
+            </div>
+            <img src="assets/images/hero-teacher.png" alt="特色教师" class="hero-teacher">
+        </div>
+    </header>
+
+    <!-- 特色教师 -->
+    <section class="featured-section">
+        <div class="container">
+            <h2 class="section-title"><span class="icon-heart">❤</span> 明星教师</h2>
+            <div class="teachers-grid">
+                <!-- 李红 -->
+                <a href="teachers/lh.html" class="teacher-card">
+                    <div class="teacher-badge">红学创始人</div>
+                    <div class="teacher-image">
+                        <img src="assets/images/lh.jpg" alt="李红老师">
+                    </div>
+                    <div class="teacher-info">
+                        <h3 class="teacher-name">李红</h3>
+                        <p class="teacher-subject">历史教师</p>
+                        <div class="teacher-stats">
+                            <span class="stat-item">❤ 9.8</span>
+                            <span class="stat-item">📚 12年教龄</span>
+                        </div>
+                    </div>
+                </a>
+                
+                <!-- 刘洪艳 -->
+                <a href="teachers/lhy.html" class="teacher-card">
+                    <div class="teacher-badge">变速教学法</div>
+                    <div class="teacher-image">
+                        <img src="assets/images/lhy.jpg" alt="刘洪艳老师">
+                    </div>
+                    <div class="teacher-info">
+                        <h3 class="teacher-name">刘洪艳</h3>
+                        <p class="teacher-subject">数学教师</p>
+                        <div class="teacher-stats">
+                            <span class="stat-item">❤ 9.5</span>
+                            <span class="stat-item">⚡ 创新教学</span>
+                        </div>
+                    </div>
+                </a>
                 
                 <!-- 吴喜娟 -->
-                <div class="featured-teacher">
-                    <img src="https://img.cdn1.vip/i/6891b8889cac7_1754380424.webp" alt="吴喜娟老师" class="featured-teacher-img">
-                    <h3 class="featured-teacher-name">吴喜娟</h3>
-                    <p class="featured-teacher-subject">英语教师 · 随机提问专家</p>
-                    <p class="featured-teacher-desc">
-                        "Come here"教学法创始人，课堂以随机提问著称，现采用小组讨论模式。
-                    </p>
-                    <a href="teachers/wxj.html" class="btn" style="padding: 8px 20px; font-size: 14px;">查看详情</a>
-                </div>
-                
-                <!-- 王宪清 -->
-                <div class="featured-teacher">
-                    <img src="https://img.cdn1.vip/i/6891b4e49289d_1754379492.webp" alt="王宪清老师" class="featured-teacher-img">
-                    <h3 class="featured-teacher-name">王宪清</h3>
-                    <p class="featured-teacher-subject">政治教师 · "大宝"教学法</p>
-                    <p class="featured-teacher-desc">
-                        政治课本朗读专家，独创"大宝"称呼体系。教学以划重点为主，课堂平稳有序。
-                    </p>
-                    <a href="teachers/wxq.html" class="btn" style="padding: 8px 20px; font-size: 14px;">查看详情</a>
-                </div>
+                <a href="teachers/wxj.html" class="teacher-card">
+                    <div class="teacher-badge">互动专家</div>
+                    <div class="teacher-image">
+                        <img src="assets/images/wxj.jpg" alt="吴喜娟老师">
+                    </div>
+                    <div class="teacher-info">
+                        <h3 class="teacher-name">吴喜娟</h3>
+                        <p class="teacher-subject">英语教师</p>
+                        <div class="teacher-stats">
+                            <span class="stat-item">❤ 9.2</span>
+                            <span class="stat-item">💬 高互动率</span>
+                        </div>
+                    </div>
+                </a>
             </div>
-            
-            <div style="text-align: center; margin-top: 40px;">
-                <a href="teachers-list.html" class="btn">查看全部教师 →</a>
-            </div>
-        </section>
-    </div>
+        </div>
+    </section>
 
-    <!-- 页脚 -->
-    <footer class="footer">
+    <!-- 红学理论 -->
+    <section class="theory-section">
         <div class="container">
-            <ul class="footer-links">
-                <li><a href="#">关于项目</a></li>
-                <li><a href="#">使用条款</a></li>
-                <li><a href="#">隐私政策</a></li>
-                <li><a href="#">联系我们</a></li>
-            </ul>
-            <p>© 2025 用心百科 - 沈阳市第162中学教师全记录</p>
-            <p>本网站内容仅供学习交流使用，不代表任何官方立场</p>
+            <div class="theory-content">
+                <h2>红学教育理论</h2>
+                <p class="theory-desc">由李红老师创立的"用心教育"理论体系，强调通过情感共鸣和教育力场的建立，实现知识传递与人格培养的完美结合。</p>
+                <ul class="theory-features">
+                    <li>❤️ 情感化教学</li>
+                    <li>⚡ 量子态备课法</li>
+                    <li>🌐 教育力场构建</li>
+                </ul>
+                <a href="#" class="btn btn-primary">深入红学研究</a>
+            </div>
+            <div class="theory-image">
+                <img src="assets/images/theory.png" alt="红学理论示意图">
+            </div>
+        </div>
+    </section>
+
+    <!-- 简约页脚 -->
+    <footer class="simple-footer">
+        <div class="container">
+            <p>© 2025 用心百科 - 红学研究院</p>
         </div>
     </footer>
 
-    <script>
-        // 简单的心跳动画
-        document.addEventListener('DOMContentLoaded', function() {
-            // 可以添加一些简单的交互效果
-            const heart = document.querySelector('.heart');
-            heart.addEventListener('click', function() {
-                this.style.animation = 'none';
-                void this.offsetWidth; // 触发重绘
-                this.style.animation = 'heartbeat 1.5s infinite';
-            });
-        });
-    </script>
+    <script src="assets/js/script.js"></script>
 </body>
 </html>
