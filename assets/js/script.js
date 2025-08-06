@@ -64,3 +64,30 @@ document.addEventListener('DOMContentLoaded', function() {
         return cardType.includes(selectedType);
     }
 });
+// ===== 夜间模式功能 =====
+document.addEventListener('DOMContentLoaded', function() {
+    // 创建夜间模式切换按钮
+    const themeSwitcher = document.createElement('button');
+    themeSwitcher.className = 'theme-switcher';
+    themeSwitcher.innerHTML = '🌙';
+    themeSwitcher.title = '切换夜间模式';
+    document.body.appendChild(themeSwitcher);
+    
+    // 检查本地存储的主题偏好
+    if (localStorage.getItem('darkMode') === 'enabled') {
+        document.body.classList.add('dark-mode');
+        themeSwitcher.innerHTML = '☀️';
+    }
+    
+    // 主题切换功能
+    themeSwitcher.addEventListener('click', function() {
+        document.body.classList.toggle('dark-mode');
+        if (document.body.classList.contains('dark-mode')) {
+            localStorage.setItem('darkMode', 'enabled');
+            themeSwitcher.innerHTML = '☀️';
+        } else {
+            localStorage.setItem('darkMode', 'disabled');
+            themeSwitcher.innerHTML = '🌙';
+        }
+    });
+});
