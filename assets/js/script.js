@@ -1,44 +1,66 @@
-// 共用JavaScript功能
+// 教师列表页功能
 document.addEventListener('DOMContentLoaded', function() {
     // 搜索功能
+    const searchInput = document.querySelector('.search-input');
     const searchBtn = document.querySelector('.search-btn');
-    if(searchBtn) {
+    
+    if(searchBtn && searchInput) {
         searchBtn.addEventListener('click', performSearch);
+        searchInput.addEventListener('keypress', function(e) {
+            if(e.key === 'Enter') performSearch();
+        });
     }
     
-    // 分类筛选
-    const categoryItems = document.querySelectorAll('.category-item');
-    categoryItems.forEach(item => {
-        item.addEventListener('click', filterTeachers);
-    });
-});
-
-function performSearch() {
-    const query = document.querySelector('.search-input')?.value.trim().toLowerCase();
-    if(!query) return;
+    // 筛选功能
+    const subjectFilter = document.getElementById('subject-filter');
+    const typeFilter = document.getElementById('type-filter');
     
-    const cards = document.querySelectorAll('.teacher-card');
-    cards.forEach(card => {
+    if(subjectFilter) subjectFilter.addEventListener('change', filterTeachers);
+    if(typeFilter) typeFilter.addEventListener('change', filterTeachers);
+    
+    function performSearch() {
+        const query = searchInput.value.trim().toLowerCase();
+        const cards = document.querySelectorAll('.teacher-card');
+        
+        cards.forEach(card => {
+            const visible = filterBySearch(card, query) && 
+                          filterBySubject(card) && 
+                          filterByType(card);
+            card.style.display = visible ? 'block' : 'none';
+        });
+    }
+    
+    function filterTeachers() {
+        const cards = document.querySelectorAll('.teacher-card');
+        
+        cards.forEach(card => {
+            const visible = filterBySearch(card, searchInput.value.trim().toLowerCase()) && 
+                          filterBySubject(card) && 
+                          filterByType(card);
+            card.style.display = visible ? 'block' : 'none';
+        });
+    }
+    
+    function filterBySearch(card, query) {
+        if(!query) return true;
+        
         const text = card.textContent.toLowerCase();
-        card.style.display = text.includes(query) ? 'block' : 'none';
-    });
-}
-
-function filterTeachers(e) {
-    const category = e.target.textContent.trim();
-    const cards = document.querySelectorAll('.teacher-card');
+        return text.includes(query);
+    }
     
-    // 更新active类
-    document.querySelector('.category-item.active')?.classList.remove('active');
-    e.target.classList.add('active');
+    function filterBySubject(card) {
+        const selectedSubject = subjectFilter.value;
+        if(!selectedSubject) return true;
+        
+        const cardSubject = card.dataset.subject;
+        return cardSubject.includes(selectedSubject);
+    }
     
-    // 筛选逻辑
-    cards.forEach(card => {
-        if(category === '全部教师') {
-            card.style.display = 'block';
-        } else {
-            const cardCategory = card.dataset.category;
-            card.style.display = cardCategory?.includes(category) ? 'block' : 'none';
-        }
-    });
-}
+    function filterByType(card) {
+        const selectedType = typeFilter.value;
+        if(!selectedType) return true;
+        
+        const cardType = card.dataset.type || '';
+        return cardType.includes(selectedType);
+    }
+});
