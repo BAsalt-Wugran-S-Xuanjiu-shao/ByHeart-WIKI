@@ -3,473 +3,200 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>教师列表 - 用心百科</title>
-    <style>
-        /* 保留与首页相同的样式 */
-        :root {
-            --primary-color: #6a11cb;
-            --secondary-color: #2575fc;
-            --text-color: #333;
-            --light-bg: #f9f9f9;
-            --card-bg: #fff;
-        }
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        body {
-            font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
-            line-height: 1.6;
-            color: var(--text-color);
-            background-color: var(--light-bg);
-        }
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-        
-        /* 顶部导航 */
-        .navbar {
-            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
-            padding: 15px 0;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-        .nav-container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .logo {
-            color: white;
-            font-size: 24px;
-            font-weight: bold;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-        }
-        .logo-icon {
-            margin-right: 10px;
-            font-size: 28px;
-        }
-        .nav-links {
-            display: flex;
-            list-style: none;
-        }
-        .nav-links li {
-            margin-left: 25px;
-        }
-        .nav-links a {
-            color: white;
-            text-decoration: none;
-            font-size: 16px;
-            transition: opacity 0.3s;
-        }
-        .nav-links a:hover {
-            opacity: 0.9;
-            text-decoration: underline;
-        }
-        
-        /* 搜索框 */
-        .search-container {
-            max-width: 600px;
-            margin: 20px auto;
-            position: relative;
-        }
-        .search-input {
-            width: 100%;
-            padding: 15px 25px;
-            border: 2px solid #ddd;
-            border-radius: 30px;
-            font-size: 16px;
-            outline: none;
-            transition: all 0.3s;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-        }
-        .search-input:focus {
-            border-color: var(--secondary-color);
-            box-shadow: 0 0 0 3px rgba(37, 117, 252, 0.2);
-        }
-        .search-btn {
-            position: absolute;
-            right: 8px;
-            top: 8px;
-            background: var(--secondary-color);
-            color: white;
-            border: none;
-            border-radius: 50%;
-            width: 44px;
-            height: 44px;
-            cursor: pointer;
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .search-btn:hover {
-            background: #1a68e0;
-            transform: scale(1.05);
-        }
-        
-        /* 分类导航 */
-        .category-nav {
-            display: flex;
-            justify-content: center;
-            margin: 20px 0;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-        .category-item {
-            padding: 10px 20px;
-            background: var(--card-bg);
-            border-radius: 20px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-            cursor: pointer;
-            transition: all 0.3s;
-            font-size: 15px;
-            border: 1px solid #eee;
-        }
-        .category-item:hover, .category-item.active {
-            background: var(--secondary-color);
-            color: white;
-            box-shadow: 0 4px 10px rgba(37, 117, 252, 0.2);
-        }
-        
-        /* 教师卡片 */
-        .teachers-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 25px;
-            margin: 40px 0;
-        }
-        .teacher-card {
-            background: var(--card-bg);
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            text-decoration: none;
-            color: inherit;
-            display: block;
-        }
-        .teacher-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-        }
-        .teacher-image {
-            height: 200px;
-            overflow: hidden;
-            position: relative;
-        }
-        .teacher-image img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.5s ease;
-        }
-        .teacher-card:hover .teacher-image img {
-            transform: scale(1.05);
-        }
-        .teacher-info {
-            padding: 20px;
-        }
-        .teacher-name {
-            font-size: 22px;
-            font-weight: bold;
-            margin-bottom: 5px;
-            color: var(--primary-color);
-        }
-        .teacher-subject {
-            color: #666;
-            margin-bottom: 15px;
-            font-size: 15px;
-        }
-        .teacher-desc {
-            font-size: 14px;
-            color: #555;
-            margin-bottom: 15px;
-            display: -webkit-box;
-            -webkit-line-clamp: 3;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-            line-height: 1.5;
-        }
-        .teacher-tags {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-        }
-        .teacher-tag {
-            display: inline-block;
-            padding: 5px 10px;
-            background-color: #f0f7ff;
-            color: var(--secondary-color);
-            border-radius: 15px;
-            font-size: 12px;
-            font-weight: 500;
-        }
-        
-        /* 页脚 */
-        .footer {
-            text-align: center;
-            margin-top: 80px;
-            padding: 30px 0;
-            color: #666;
-            font-size: 14px;
-            border-top: 1px solid #eee;
-            background: var(--card-bg);
-        }
-        .footer-links {
-            display: flex;
-            justify-content: center;
-            list-style: none;
-            margin-bottom: 20px;
-        }
-        .footer-links li {
-            margin: 0 15px;
-        }
-        .footer-links a {
-            color: #666;
-            text-decoration: none;
-        }
-        .footer-links a:hover {
-            color: var(--secondary-color);
-            text-decoration: underline;
-        }
-        
-        /* 响应式设计 */
-        @media (max-width: 768px) {
-            .nav-container {
-                flex-direction: column;
-            }
-            .nav-links {
-                margin-top: 15px;
-            }
-            .nav-links li {
-                margin-left: 15px;
-                margin-right: 15px;
-            }
-            .teachers-container {
-                grid-template-columns: 1fr;
-            }
-        }
-    </style>
+    <title>教师名录 - 用心百科</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="icon" href="assets/images/logo.png" type="image/png">
 </head>
 <body>
-    <!-- 顶部导航 -->
+    <!-- 导航栏 -->
     <nav class="navbar">
         <div class="container nav-container">
-            <a href="index.html" class="logo">
-                <span class="logo-icon">❤</span>
-                <span>用心百科</span>
+            <a href="index.html" class="logo-wrapper">
+                <img src="assets/images/logo.png" alt="用心百科" class="logo-img">
+                <span class="logo-text">用心百科</span>
             </a>
             <ul class="nav-links">
                 <li><a href="index.html">首页</a></li>
-                <li><a href="teachers-list.html" class="active">列表</a></li>
-                <li><a href="#">红学</a></li>
-                <li><a href="#">关于</a></li>
+                <li><a href="teachers-list.html" class="active">教师名录</a></li>
+                <li><a href="#">红学研究</a></li>
+                <li><a href="#">关于我们</a></li>
             </ul>
         </div>
     </nav>
 
     <!-- 主要内容 -->
-    <div class="container">
-        <!-- 搜索框 -->
-        <div class="search-container">
-            <input type="text" class="search-input" placeholder="搜索教师姓名、科目或教学特点...">
-            <button class="search-btn">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <circle cx="11" cy="11" r="8"></circle>
-                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                </svg>
-            </button>
-        </div>
+    <main class="container teacher-list-container">
+        <h1 class="page-title">教师名录</h1>
+        
+        <!-- 搜索和筛选 -->
+        <div class="list-controls">
+            <div class="search-container">
+                <input type="text" class="search-input" placeholder="搜索教师姓名、科目或特点...">
+                <button class="search-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    </svg>
+                </button>
+            </div>
 
-        <!-- 分类导航 -->
-        <div class="category-nav">
-            <div class="category-item active">全部教师</div>
-            <div class="category-item">文科教师</div>
-            <div class="category-item">理科教师</div>
-            <div class="category-item">班主任</div>
-            <div class="category-item">教学明星</div>
+            <div class="filter-options">
+                <div class="filter-group">
+                    <label for="subject-filter">学科：</label>
+                    <select id="subject-filter" class="filter-select">
+                        <option value="">全部学科</option>
+                        <option value="文科">文科</option>
+                        <option value="理科">理科</option>
+                    </select>
+                </div>
+                
+                <div class="filter-group">
+                    <label for="type-filter">类型：</label>
+                    <select id="type-filter" class="filter-select">
+                        <option value="">全部类型</option>
+                        <option value="班主任">班主任</option>
+                        <option value="教学明星">教学明星</option>
+                    </select>
+                </div>
+            </div>
         </div>
 
         <!-- 教师卡片网格 -->
-        <div class="teachers-container">
+        <div class="teachers-grid">
             <!-- 李红 -->
-            <a href="teachers/lh.html" class="teacher-card" data-category="文科教师 班主任 教学明星">
-                <div class="teacher-image">
-                    <img src="https://img.cdn1.vip/i/6891aeee18e01_1754377966.webp" alt="李红老师">
+            <article class="teacher-card" data-subject="文科" data-type="班主任 教学明星">
+                <div class="card-header">
+                    <div class="teacher-badge">红学创始人</div>
+                    <img src="assets/images/lh.webp" alt="李红老师" class="teacher-avatar">
                 </div>
-                <div class="teacher-info">
-                    <div class="teacher-name">李红</div>
-                    <div class="teacher-subject">历史教师 · 红学创始人</div>
-                    <div class="teacher-desc">
-                        创立"用心教育"理论体系，2025届91班班主任。独创量子态备课法，课堂充满教育力场，学生历史成绩常年年级第一。
+                <div class="card-body">
+                    <h2 class="teacher-name">李红</h2>
+                    <p class="teacher-meta">历史教师 | 教龄12年</p>
+                    <div class="teacher-rating">
+                        <span class="rating-stars">★★★★★</span>
+                        <span class="rating-value">9.8</span>
                     </div>
+                    <p class="teacher-desc">
+                        创立"用心教育"理论体系，独创量子态备课法，课堂充满教育力场。
+                    </p>
                     <div class="teacher-tags">
-                        <span class="teacher-tag">用心辐射</span>
-                        <span class="teacher-tag">教育力场</span>
-                        <span class="teacher-tag">红学理论</span>
+                        <span class="tag">教育力场</span>
+                        <span class="tag">红学理论</span>
+                        <span class="tag">历史教学</span>
                     </div>
                 </div>
-            </a>
-            
-            <!-- 王宪清 -->
-            <a href="teachers/wxq.html" class="teacher-card" data-category="文科教师">
-                <div class="teacher-image">
-                    <img src="https://img.cdn1.vip/i/6891b4e49289d_1754379492.webp" alt="王宪清老师">
-                </div>
-                <div class="teacher-info">
-                    <div class="teacher-name">王宪清</div>
-                    <div class="teacher-subject">政治教师 · "大宝"教学法</div>
-                    <div class="teacher-desc">
-                        政治课本朗读专家，独创"大宝"称呼体系。教学以划重点为主，课堂平稳有序，学生评价两极分化。
-                    </div>
-                    <div class="teacher-tags">
-                        <span class="teacher-tag">课本朗读</span>
-                        <span class="teacher-tag">划重点</span>
-                        <span class="teacher-tag">平稳教学</span>
-                    </div>
-                </div>
-            </a>
-            
-            <!-- 吴喜娟 -->
-            <a href="teachers/wxj.html" class="teacher-card" data-category="文科教师 教学明星">
-                <div class="teacher-image">
-                    <img src="https://img.cdn1.vip/i/6891b8889cac7_1754380424.webp" alt="吴喜娟老师">
-                </div>
-                <div class="teacher-info">
-                    <div class="teacher-name">吴喜娟</div>
-                    <div class="teacher-subject">英语教师 · 随机提问专家</div>
-                    <div class="teacher-desc">
-                        "Come here"教学法创始人，课堂以随机提问著称。早期以严厉单词测试闻名，现采用小组讨论模式。
-                    </div>
-                    <div class="teacher-tags">
-                        <span class="teacher-tag">随机提问</span>
-                        <span class="teacher-tag">小组讨论</span>
-                        <span class="teacher-tag">单词测试</span>
-                    </div>
-                </div>
-            </a>
-            
-            <!-- 刘诗情 -->
-            <a href="teachers/lsq.html" class="teacher-card" data-category="文科教师">
-                <div class="teacher-image">
-                    <img src="https://img.cdn1.vip/i/6891bb951f595_1754381205.webp" alt="刘诗情老师">
-                </div>
-                <div class="teacher-info">
-                    <div class="teacher-name">刘诗情</div>
-                    <div class="teacher-subject">语文教师 · PPT教学</div>
-                    <div class="teacher-desc">
-                        教学以PPT展示为主要形式，作业以抄写类为主。课堂互动频率较低，教学方式存在一定争议。
-                    </div>
-                    <div class="teacher-tags">
-                        <span class="teacher-tag">PPT教学</span>
-                        <span class="teacher-tag">抄写作业</span>
-                        <span class="teacher-tag">低互动</span>
-                    </div>
-                </div>
-            </a>
-            <!-- 刘洪艳 -->
-            <a href="teachers/lsq.html" class="teacher-card" data-category="理科教师 教学明星">
-                <div class="teacher-image">
-                    <img src="https://img.cdn1.vip/i/6892f25d8eb95_1754460765.webp" alt="刘洪艳老师">
-                </div>
-                <div class="teacher-info">
-                    <div class="teacher-name">刘洪艳</div>
-                    <div class="teacher-subject">数学教师 · 变速教学</div>
-                    <div class="teacher-desc">
-                        讲课的时候非常的快，讲题的时候非常的慢，让学生讲题磨练学生思维。
-                    </div>
-                    <div class="teacher-tags">
-                        <span class="teacher-tag">变速教学</span>
-                        <span class="teacher-tag">发散思维</span>
-                        <span class="teacher-tag">希沃白板</span>
-                    </div>
-                </div>
-            </a>
-            
-            <!-- 可以继续添加更多教师卡片 -->
-        </div>
-    </div>
+                <a href="teachers/lh.html" class="card-link">查看详情 →</a>
+            </article>
 
-    <!-- 页脚 -->
-    <footer class="footer">
+            <!-- 刘洪艳 -->
+            <article class="teacher-card" data-subject="理科" data-type="教学明星">
+                <div class="card-header">
+                    <div class="teacher-badge">变速教学</div>
+                    <img src="assets/images/lhy.webp" alt="刘洪艳老师" class="teacher-avatar">
+                </div>
+                <div class="card-body">
+                    <h2 class="teacher-name">刘洪艳</h2>
+                    <p class="teacher-meta">数学教师 | 教龄8年</p>
+                    <div class="teacher-rating">
+                        <span class="rating-stars">★★★★☆</span>
+                        <span class="rating-value">9.5</span>
+                    </div>
+                    <p class="teacher-desc">
+                        独创"变速教学法"，新课快讲+精讲习题，培养学生发散思维。
+                    </p>
+                    <div class="teacher-tags">
+                        <span class="tag">希沃白板</span>
+                        <span class="tag">变速教学</span>
+                        <span class="tag">数学思维</span>
+                    </div>
+                </div>
+                <a href="teachers/lhy.html" class="card-link">查看详情 →</a>
+            </article>
+
+            <!-- 吴喜娟 -->
+            <article class="teacher-card" data-subject="文科" data-type="教学明星">
+                <div class="card-header">
+                    <div class="teacher-badge">互动专家</div>
+                    <img src="assets/images/wxj.webp" alt="吴喜娟老师" class="teacher-avatar">
+                </div>
+                <div class="card-body">
+                    <h2 class="teacher-name">吴喜娟</h2>
+                    <p class="teacher-meta">英语教师 | 教龄10年</p>
+                    <div class="teacher-rating">
+                        <span class="rating-stars">★★★★☆</span>
+                        <span class="rating-value">9.2</span>
+                    </div>
+                    <p class="teacher-desc">
+                        "Come here"教学法创始人，课堂以随机提问著称，提高学生参与度。
+                    </p>
+                    <div class="teacher-tags">
+                        <span class="tag">课堂互动</span>
+                        <span class="tag">英语教学</span>
+                        <span class="tag">小组讨论</span>
+                    </div>
+                </div>
+                <a href="teachers/wxj.html" class="card-link">查看详情 →</a>
+            </article>
+
+            <!-- 王宪清 -->
+            <article class="teacher-card" data-subject="文科">
+                <div class="card-header">
+                    <div class="teacher-badge">"大宝"教学</div>
+                    <img src="assets/images/wxq.webp" alt="王宪清老师" class="teacher-avatar">
+                </div>
+                <div class="card-body">
+                    <h2 class="teacher-name">王宪清</h2>
+                    <p class="teacher-meta">政治教师 | 教龄15年</p>
+                    <div class="teacher-rating">
+                        <span class="rating-stars">★★★☆☆</span>
+                        <span class="rating-value">8.3</span>
+                    </div>
+                    <p class="teacher-desc">
+                        政治课本朗读专家，独创"大宝"称呼体系，教学以划重点为主。
+                    </p>
+                    <div class="teacher-tags">
+                        <span class="tag">政治教学</span>
+                        <span class="tag">课本朗读</span>
+                        <span class="tag">重点归纳</span>
+                    </div>
+                </div>
+                <a href="teachers/wxq.html" class="card-link">查看详情 →</a>
+            </article>
+
+            <!-- 刘诗情 -->
+            <article class="teacher-card" data-subject="文科">
+                <div class="card-header">
+                    <div class="teacher-badge">PPT教学</div>
+                    <img src="assets/images/lsq.webp" alt="刘诗情老师" class="teacher-avatar">
+                </div>
+                <div class="card-body">
+                    <h2 class="teacher-name">刘诗情</h2>
+                    <p class="teacher-meta">语文教师 | 教龄5年</p>
+                    <div class="teacher-rating">
+                        <span class="rating-stars">★★★☆☆</span>
+                        <span class="rating-value">7.9</span>
+                    </div>
+                    <p class="teacher-desc">
+                        教学以PPT展示为主要形式，注重基础知识训练和课文背诵。
+                    </p>
+                    <div class="teacher-tags">
+                        <span class="tag">语文教学</span>
+                        <span class="tag">PPT教学</span>
+                        <span class="tag">基础知识</span>
+                    </div>
+                </div>
+                <a href="teachers/lsq.html" class="card-link">查看详情 →</a>
+            </article>
+        </div>
+    </main>
+
+    <!-- 简约页脚 -->
+    <footer class="simple-footer">
         <div class="container">
-            
-            <p>© 2025 用心百科 - 沈阳市第162中学教师全记录</p>
-            <p>本网站内容仅供学习交流使用，不代表任何官方立场</p>
+            <p>© 2025 用心百科 - 红学研究院</p>
         </div>
     </footer>
 
-    <script>
-        // 搜索和筛选功能
-        document.addEventListener('DOMContentLoaded', function() {
-            // 获取所有教师卡片
-            const teacherCards = Array.from(document.querySelectorAll('.teacher-card'));
-            
-            // 搜索功能
-            function performSearch(query) {
-                if (!query) {
-                    // 如果搜索为空，显示所有教师
-                    teacherCards.forEach(card => card.style.display = 'block');
-                    return;
-                }
-                
-                const lowerQuery = query.toLowerCase();
-                teacherCards.forEach(card => {
-                    const name = card.querySelector('.teacher-name').textContent.toLowerCase();
-                    const subject = card.querySelector('.teacher-subject').textContent.toLowerCase();
-                    const desc = card.querySelector('.teacher-desc').textContent.toLowerCase();
-                    const tags = Array.from(card.querySelectorAll('.teacher-tag')).map(tag => tag.textContent.toLowerCase());
-                    
-                    // 检查是否匹配任何字段
-                    const matches = name.includes(lowerQuery) || 
-                                  subject.includes(lowerQuery) || 
-                                  desc.includes(lowerQuery) || 
-                                  tags.some(tag => tag.includes(lowerQuery));
-                    
-                    card.style.display = matches ? 'block' : 'none';
-                });
-            }
-            
-            // 点击搜索按钮
-            document.querySelector('.search-btn').addEventListener('click', function() {
-                const query = document.querySelector('.search-input').value.trim();
-                performSearch(query);
-            });
-            
-            // 回车搜索
-            document.querySelector('.search-input').addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') {
-                    const query = this.value.trim();
-                    performSearch(query);
-                }
-            });
-            
-            // 分类筛选
-            document.querySelectorAll('.category-item').forEach(item => {
-                item.addEventListener('click', function() {
-                    document.querySelector('.category-item.active').classList.remove('active');
-                    this.classList.add('active');
-                    
-                    const category = this.textContent.trim();
-                    if (category === '全部教师') {
-                        teacherCards.forEach(card => card.style.display = 'block');
-                    } else {
-                        teacherCards.forEach(card => {
-                            const cardCategories = card.dataset.category?.split(' ') || [];
-                            card.style.display = cardCategories.includes(category) ? 'block' : 'none';
-                        });
-                    }
-                });
-            });
-        });
-    </script>
+    <script src="assets/js/script.js"></script>
 </body>
 </html>
