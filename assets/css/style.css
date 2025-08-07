@@ -103,605 +103,249 @@ body {
   width: 100%;
 }
 
-/* ===== 首页特有样式 ===== */
-.header {
-  text-align: center;
-  padding: 100px 0 60px;
+/* ===== 搜索框样式 ===== */
+.search-container {
   position: relative;
-  color: white;
-  text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+  flex-grow: 1;
+  max-width: 400px;
+  margin-right: 20px;
 }
 
-.header::before {
+.search-input {
+  width: 100%;
+  padding: 10px 15px;
+  padding-right: 40px;
+  border: 1px solid #ddd;
+  border-radius: 20px;
+  font-size: 16px;
+  transition: all 0.3s;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 2px rgba(106, 17, 203, 0.2);
+}
+
+.search-btn {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #666;
+  padding: 5px;
+}
+
+.search-btn:hover {
+  color: var(--primary-color);
+}
+
+/* ===== 教师列表页样式 ===== */
+.teacher-list-container {
+  padding: 40px 0;
+}
+
+.page-title {
+  font-size: 2.5rem;
+  color: var(--primary-color);
+  margin-bottom: 30px;
+  text-align: center;
+  position: relative;
+  padding-bottom: 15px;
+}
+
+.page-title::after {
   content: '';
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0,0,0,0.5);
-  z-index: -1;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 4px;
+  background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+  border-radius: 2px;
 }
 
-.header h1 {
-  font-size: 48px;
-  margin-bottom: 20px;
+.list-controls {
+  background: var(--card-bg);
+  padding: 20px;
+  border-radius: var(--border-radius);
+  box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+  margin-bottom: 30px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  align-items: flex-end;
 }
 
-.header p {
-  font-size: 20px;
-  max-width: 700px;
-  margin: 0 auto 30px;
+.filter-options {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
 }
 
-/* ===== 教师列表页共用样式 ===== */
-.teachers-container {
+.filter-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.filter-group label {
+  font-weight: bold;
+  color: #555;
+}
+
+.filter-select {
+  padding: 8px 15px;
+  border: 1px solid #ddd;
+  border-radius: 20px;
+  background: white;
+  min-width: 120px;
+}
+
+/* ===== 教师卡片样式 ===== */
+.teachers-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 25px;
-  margin: 40px 0;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 30px;
+  margin-top: 20px;
 }
 
 .teacher-card {
   background: var(--card-bg);
   border-radius: var(--border-radius);
   overflow: hidden;
-  box-shadow: 0 3px 10px rgba(0,0,0,0.08);
-  transition: all 0.3s;
-  text-decoration: none;
-  color: inherit;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+  transition: all 0.3s ease;
+  position: relative;
 }
 
-.teacher-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+.teacher-card[hidden] {
+  display: none;
 }
 
-.teacher-image {
+.card-header {
+  position: relative;
   height: 200px;
   overflow: hidden;
 }
 
-.teacher-image img {
+.teacher-avatar {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.5s;
+  transition: transform 0.5s ease;
 }
 
-.teacher-card:hover .teacher-image img {
+.teacher-card:hover .teacher-avatar {
   transform: scale(1.05);
 }
 
-.teacher-info {
+.teacher-badge {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: var(--secondary-color);
+  color: white;
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  z-index: 2;
+}
+
+.card-body {
   padding: 20px;
 }
 
 .teacher-name {
-  font-size: 22px;
-  font-weight: bold;
+  font-size: 1.4rem;
   margin-bottom: 5px;
+  color: var(--primary-color);
 }
 
-/* 各学科老师颜色区分 */
-.teacher-card[href*="lh"] .teacher-name { color: var(--primary-color); }
-.teacher-card[href*="wxq"] .teacher-name { color: var(--danger-color); }
-.teacher-card[href*="wxj"] .teacher-name { color: #6f42c1; }
-.teacher-card[href*="lsq"] .teacher-name { color: var(--success-color); }
-.teacher-card[href*="lhy"] .teacher-name { color: var(--warning-color); }
-
-/* ===== 页脚 ===== */
-.footer {
-  text-align: center;
-  padding: 40px 0;
+.teacher-meta {
   color: #666;
-  font-size: 14px;
-  background: var(--card-bg);
-  margin-top: 60px;
+  font-size: 0.9rem;
+  margin-bottom: 10px;
+}
+
+.teacher-rating {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 15px;
+}
+
+.rating-stars {
+  color: #ffc107;
+  letter-spacing: 2px;
+}
+
+.rating-value {
+  font-weight: bold;
+  color: var(--text-color);
+}
+
+.teacher-desc {
+  color: #555;
+  line-height: 1.6;
+  margin-bottom: 15px;
+  font-size: 0.95rem;
+}
+
+.teacher-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 15px;
+}
+
+.tag {
+  background: #f0f7ff;
+  color: var(--secondary-color);
+  padding: 4px 12px;
+  border-radius: 15px;
+  font-size: 0.8rem;
+}
+
+.card-link {
+  display: block;
+  text-align: right;
+  padding: 10px 20px;
+  color: var(--secondary-color);
+  text-decoration: none;
+  font-weight: bold;
+  border-top: 1px dashed #eee;
+  transition: all 0.3s;
+}
+
+.card-link:hover {
+  color: var(--primary-color);
+  background: #f9f9f9;
 }
 
 /* ===== 响应式设计 ===== */
 @media (max-width: 768px) {
-  .nav-container {
+  .list-controls {
     flex-direction: column;
-    gap: 15px;
+    align-items: stretch;
   }
   
-  .header h1 {
-    font-size: 36px;
+  .search-container {
+    max-width: 100%;
+    margin-right: 0;
+    margin-bottom: 15px;
   }
   
-  .teachers-container {
+  .filter-options {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .teachers-grid {
     grid-template-columns: 1fr;
   }
-}
-/* ===== 首页特有样式 ===== */
-.hero {
-    background: linear-gradient(135deg, rgba(106,17,203,0.9) 0%, rgba(37,117,252,0.9) 100%);
-    color: white;
-    padding: 80px 0;
-    position: relative;
-    overflow: hidden;
-}
-
-.hero::after {
-    content: '';
-    position: absolute;
-    bottom: -50px;
-    right: -50px;
-    width: 300px;
-    height: 300px;
-    background: url('../images/logo.png') no-repeat;
-    background-size: contain;
-    opacity: 0.1;
-    z-index: 0;
-}
-
-.hero-content {
-    position: relative;
-    z-index: 1;
-    max-width: 600px;
-}
-
-.hero h1 {
-    font-size: 3rem;
-    margin-bottom: 20px;
-    line-height: 1.2;
-}
-
-.text-highlight {
-    color: #ffcc00;
-    font-weight: bold;
-}
-
-.hero-subtitle {
-    font-size: 1.2rem;
-    margin-bottom: 30px;
-    opacity: 0.9;
-}
-
-.hero-actions {
-    display: flex;
-    gap: 15px;
-    margin-top: 30px;
-}
-
-.btn {
-    padding: 12px 30px;
-    border-radius: 30px;
-    font-weight: bold;
-    text-decoration: none;
-    transition: all 0.3s;
-}
-
-.btn-primary {
-    background: white;
-    color: var(--primary-color);
-}
-
-.btn-outline {
-    border: 2px solid white;
-    color: white;
-}
-
-.hero-teacher {
-    position: absolute;
-    right: 10%;
-    bottom: 0;
-    height: 400px;
-    z-index: 1;
-}
-
-/* 教师网格 */
-.teachers-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 30px;
-    margin-top: 40px;
-}
-
-.teacher-badge {
-    position: absolute;
-    top: 15px;
-    right: 15px;
-    background: var(--secondary-color);
-    color: white;
-    padding: 5px 10px;
-    border-radius: 20px;
-    font-size: 0.8rem;
-    z-index: 2;
-}
-
-/* 简约页脚 */
-.simple-footer {
-    text-align: center;
-    padding: 30px 0;
-    background: rgba(255,255,255,0.8);
-    margin-top: 60px;
-    font-size: 0.9rem;
-    color: #666;
-}
-
-/* 响应式调整 */
-@media (max-width: 992px) {
-    .hero-teacher {
-        display: none;
-    }
-    .hero-content {
-        max-width: 100%;
-        text-align: center;
-    }
-    .hero-actions {
-        justify-content: center;
-    }
-}
-/* ===== 教师列表页特有样式 ===== */
-.teacher-list-container {
-    padding: 40px 0;
-}
-
-.page-title {
-    font-size: 2.5rem;
-    color: var(--primary-color);
-    margin-bottom: 30px;
-    text-align: center;
-    position: relative;
-    padding-bottom: 15px;
-}
-
-.page-title::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 80px;
-    height: 4px;
-    background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
-    border-radius: 2px;
-}
-
-.list-controls {
-    background: var(--card-bg);
-    padding: 20px;
-    border-radius: var(--border-radius);
-    box-shadow: 0 3px 10px rgba(0,0,0,0.05);
-    margin-bottom: 30px;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    justify-content: space-between;
-    align-items: flex-end;
-}
-
-.filter-options {
-    display: flex;
-    gap: 20px;
-    flex-wrap: wrap;
-}
-
-.filter-group {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.filter-group label {
-    font-weight: bold;
-    color: #555;
-}
-
-.filter-select {
-    padding: 8px 15px;
-    border: 1px solid #ddd;
-    border-radius: 20px;
-    background: white;
-    min-width: 120px;
-}
-
-/* 教师卡片增强样式 */
-.teachers-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 30px;
-    margin-top: 20px;
-}
-
-.teacher-card {
-    background: var(--card-bg);
-    border-radius: var(--border-radius);
-    overflow: hidden;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.08);
-    transition: all 0.3s ease;
-    position: relative;
-}
-
-.teacher-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 25px rgba(0,0,0,0.12);
-}
-
-.card-header {
-    position: relative;
-    height: 200px;
-    overflow: hidden;
-}
-
-.teacher-avatar {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform 0.5s ease;
-}
-
-.teacher-card:hover .teacher-avatar {
-    transform: scale(1.05);
-}
-
-.teacher-badge {
-    position: absolute;
-    top: 15px;
-    right: 15px;
-    background: var(--secondary-color);
-    color: white;
-    padding: 5px 12px;
-    border-radius: 20px;
-    font-size: 0.8rem;
-    z-index: 2;
-}
-
-.card-body {
-    padding: 20px;
-}
-
-.teacher-name {
-    font-size: 1.4rem;
-    margin-bottom: 5px;
-    color: var(--primary-color);
-}
-
-.teacher-meta {
-    color: #666;
-    font-size: 0.9rem;
-    margin-bottom: 10px;
-}
-
-.teacher-rating {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 15px;
-}
-
-.rating-stars {
-    color: #ffc107;
-    letter-spacing: 2px;
-}
-
-.rating-value {
-    font-weight: bold;
-    color: var(--text-color);
-}
-
-.teacher-desc {
-    color: #555;
-    line-height: 1.6;
-    margin-bottom: 15px;
-    font-size: 0.95rem;
-}
-
-.teacher-tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin-bottom: 15px;
-}
-
-.tag {
-    background: #f0f7ff;
-    color: var(--secondary-color);
-    padding: 4px 12px;
-    border-radius: 15px;
-    font-size: 0.8rem;
-}
-
-.card-link {
-    display: block;
-    text-align: right;
-    padding: 10px 20px;
-    color: var(--secondary-color);
-    text-decoration: none;
-    font-weight: bold;
-    border-top: 1px dashed #eee;
-    transition: all 0.3s;
-}
-
-.card-link:hover {
-    color: var(--primary-color);
-    background: #f9f9f9;
-}
-
-/* 响应式调整 */
-@media (max-width: 768px) {
-    .list-controls {
-        flex-direction: column;
-        align-items: stretch;
-    }
-    
-    .filter-options {
-        flex-direction: column;
-        gap: 10px;
-    }
-    
-    .teachers-grid {
-        grid-template-columns: 1fr;
-    }
-}
-
-.floating-search-container {
-  max-width: 600px;
-  margin: 0 auto 40px;
-}
-
-.floating-search-box {
-  position: relative;
-  height: 56px;
-}
-
-.floating-search-input {
-  width: 100%;
-  height: 100%;
-  padding: 20px 60px 0 20px;
-  border: 2px solid #e0e0e0;
-  border-radius: 8px;
-  font-size: 16px;
-  transition: all 0.3s;
-  outline: none;
-}
-
-.floating-search-input:focus {
-  border-color: #6a11cb;
-}
-
-.floating-search-input:focus + .floating-label,
-.floating-search-input:not(:placeholder-shown) + .floating-label {
-  top: 8px;
-  left: 20px;
-  font-size: 12px;
-  color: #6a11cb;
-}
-
-.floating-label {
-  position: absolute;
-  top: 18px;
-  left: 20px;
-  color: #999;
-  transition: all 0.3s;
-  pointer-events: none;
-}
-
-.floating-search-btn {
-  position: absolute;
-  right: 10px;
-  top: 10px;
-  width: 36px;
-  height: 36px;
-  border: none;
-  background: #6a11cb;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: all 0.3s;
-}
-
-.floating-search-btn svg {
-  width: 18px;
-  height: 18px;
-  fill: white;
-}
-
-.floating-search-btn:hover {
-  background: #7d2ae8;
-  transform: scale(1.1);
-}
-
-/* ===== 夜间模式样式 ===== */
-body.dark-mode {
-    --text-color: #e0e0e0;
-    --light-bg: #121212;
-    --card-bg: #1e1e1e;
-    background-color: #121212;
-    color: #e0e0e0;
-}
-
-.dark-mode .navbar {
-    background: linear-gradient(135deg, #4a148c 0%, #311b92 100%) !important;
-}
-
-.dark-mode .teacher-content,
-.dark-mode .meta-item,
-.dark-mode .teacher-table,
-.dark-mode .teacher-card {
-    background-color: var(--card-bg) !important;
-    color: var(--text-color) !important;
-}
-
-.dark-mode .teacher-quote {
-    border-left-color: #bb86fc !important;
-    color: #cfd8dc !important;
-}
-
-.dark-mode .warning-box {
-    background-color: #2d1b1b !important;
-    border-color: #ff5252 !important;
-}
-
-.dark-mode .teacher-header {
-    background: linear-gradient(135deg, #333 0%, #555 100%) !important;
-}
-
-/* 夜间模式切换按钮 */
-.theme-switcher {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    background: var(--primary-color);
-    color: white;
-    border: none;
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    cursor: pointer;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-    z-index: 1000;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.2rem;
-    transition: all 0.3s ease;
-}
-
-.theme-switcher:hover {
-    transform: scale(1.1);
-}
-
-/* ===== 搜索框样式 ===== */
-.search-container {
-    position: relative;
-    flex-grow: 1;
-    max-width: 400px;
-}
-
-.search-input {
-    width: 100%;
-    padding: 10px 15px;
-    padding-right: 40px;
-    border: 1px solid #ddd;
-    border-radius: 20px;
-    font-size: 16px;
-    transition: all 0.3s;
-}
-
-.search-input:focus {
-    outline: none;
-    border-color: var(--primary-color);
-    box-shadow: 0 0 0 2px rgba(106, 17, 203, 0.2);
-}
-
-.search-btn {
-    position: absolute;
-    right: 10px;
-    top: 50%;
-    transform: translateY(-50%);
-    background: none;
-    border: none;
-    cursor: pointer;
-    color: #666;
-    padding: 5px;
-}
-
-.search-btn:hover {
-    color: var(--primary-color);
 }
