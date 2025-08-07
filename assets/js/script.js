@@ -1,45 +1,62 @@
-// 教师列表页功能
 document.addEventListener('DOMContentLoaded', function() {
-    // 搜索功能
+    // 获取DOM元素
     const searchInput = document.querySelector('.search-input');
     const searchBtn = document.querySelector('.search-btn');
     const subjectFilter = document.getElementById('subject-filter');
     const typeFilter = document.getElementById('type-filter');
-    
-    // 初始化搜索和筛选功能
-    function initFilters() {
-        if (searchBtn && searchInput) {
+    const teacherCards = document.querySelectorAll('.teacher-card');
+
+    // 初始化事件监听
+    function initEventListeners() {
+        // 搜索按钮点击事件
+        if (searchBtn) {
             searchBtn.addEventListener('click', filterTeachers);
+        }
+
+        // 输入框实时搜索
+        if (searchInput) {
             searchInput.addEventListener('input', filterTeachers);
         }
-        
-        if (subjectFilter) subjectFilter.addEventListener('change', filterTeachers);
-        if (typeFilter) typeFilter.addEventListener('change', filterTeachers);
+
+        // 筛选器变更事件
+        if (subjectFilter) {
+            subjectFilter.addEventListener('change', filterTeachers);
+        }
+
+        if (typeFilter) {
+            typeFilter.addEventListener('change', filterTeachers);
+        }
     }
-    
+
     // 主筛选函数
     function filterTeachers() {
-        const searchQuery = searchInput ? searchInput.value.trim().toLowerCase() : '';
-        const selectedSubject = subjectFilter ? subjectFilter.value : '';
-        const selectedType = typeFilter ? typeFilter.value : '';
-        
-        document.querySelectorAll('.teacher-card').forEach(card => {
-            const matchesSearch = searchQuery === '' || 
-                card.textContent.toLowerCase().includes(searchQuery);
+        const searchTerm = searchInput ? searchInput.value.trim().toLowerCase() : '';
+        const subjectValue = subjectFilter ? subjectFilter.value : '';
+        const typeValue = typeFilter ? typeFilter.value : '';
+
+        teacherCards.forEach(card => {
+            const cardText = card.textContent.toLowerCase();
+            const cardSubject = card.dataset.subject || '';
+            const cardType = card.dataset.type || '';
+
+            // 检查是否匹配搜索条件
+            const matchesSearch = searchTerm === '' || cardText.includes(searchTerm);
             
-            const matchesSubject = selectedSubject === '' || 
-                (card.dataset.subject && card.dataset.subject.includes(selectedSubject));
+            // 检查是否匹配学科筛选
+            const matchesSubject = subjectValue === '' || cardSubject.includes(subjectValue);
             
-            const matchesType = selectedType === '' || 
-                (card.dataset.type && card.dataset.type.includes(selectedType));
-            
-            card.style.display = matchesSearch && matchesSubject && matchesType ? 'block' : 'none';
+            // 检查是否匹配类型筛选
+            const matchesType = typeValue === '' || cardType.includes(typeValue);
+
+            // 显示或隐藏卡片
+            card.hidden = !(matchesSearch && matchesSubject && matchesType);
         });
     }
-    
+
     // 初始化
-    initFilters();
+    initEventListeners();
 });
+
 
 
         // ===== 夜间模式功能 =====
