@@ -1,65 +1,46 @@
-<script>
-    // 搜索和筛选功能
-    document.addEventListener('DOMContentLoaded', function() {
-        // 获取所有教师卡片
-        const teacherCards = Array.from(document.querySelectorAll('.teacher-card'));
-        
-        // 搜索功能
-        function performSearch(query) {
-            if (!query) {
-                // 如果搜索为空，显示所有教师
-                teacherCards.forEach(card => card.style.display = 'block');
-                return;
-            }
-            
-            const lowerQuery = query.toLowerCase();
-            teacherCards.forEach(card => {
-                const name = card.querySelector('.teacher-name').textContent.toLowerCase();
-                const subject = card.querySelector('.teacher-subject').textContent.toLowerCase();
-                const desc = card.querySelector('.teacher-desc').textContent.toLowerCase();
-                const tags = Array.from(card.querySelectorAll('.teacher-tag')).map(tag => tag.textContent.toLowerCase());
-                
-                // 检查是否匹配任何字段
-                const matches = name.includes(lowerQuery) || 
-                              subject.includes(lowerQuery) || 
-                              desc.includes(lowerQuery) || 
-                              tags.some(tag => tag.includes(lowerQuery));
-                
-                card.style.display = matches ? 'block' : 'none';
-            });
+// 教师列表页功能
+document.addEventListener('DOMContentLoaded', function() {
+    // 搜索功能
+    const searchInput = document.querySelector('.search-input');
+    const searchBtn = document.querySelector('.search-btn');
+    const subjectFilter = document.getElementById('subject-filter');
+    const typeFilter = document.getElementById('type-filter');
+    
+    // 初始化搜索和筛选功能
+    function initFilters() {
+        if (searchBtn && searchInput) {
+            searchBtn.addEventListener('click', filterTeachers);
+            searchInput.addEventListener('input', filterTeachers);
         }
         
-        // 点击搜索按钮
-        document.querySelector('.search-btn').addEventListener('click', function() {
-            const query = document.querySelector('.search-input').value.trim();
-            performSearch(query);
-        });
+        if (subjectFilter) subjectFilter.addEventListener('change', filterTeachers);
+        if (typeFilter) typeFilter.addEventListener('change', filterTeachers);
+    }
+    
+    // 主筛选函数
+    function filterTeachers() {
+        const searchQuery = searchInput ? searchInput.value.trim().toLowerCase() : '';
+        const selectedSubject = subjectFilter ? subjectFilter.value : '';
+        const selectedType = typeFilter ? typeFilter.value : '';
         
-        // 回车搜索
-        document.querySelector('.search-input').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                const query = this.value.trim();
-                performSearch(query);
-            }
+        document.querySelectorAll('.teacher-card').forEach(card => {
+            const matchesSearch = searchQuery === '' || 
+                card.textContent.toLowerCase().includes(searchQuery);
+            
+            const matchesSubject = selectedSubject === '' || 
+                (card.dataset.subject && card.dataset.subject.includes(selectedSubject));
+            
+            const matchesType = selectedType === '' || 
+                (card.dataset.type && card.dataset.type.includes(selectedType));
+            
+            card.style.display = matchesSearch && matchesSubject && matchesType ? 'block' : 'none';
         });
-        
-        // 分类筛选
-        document.querySelectorAll('.category-item').forEach(item => {
-            item.addEventListener('click', function() {
-                document.querySelector('.category-item.active').classList.remove('active');
-                this.classList.add('active');
-                
-                const category = this.textContent.trim();
-                if (category === '全部教师') {
-                    teacherCards.forEach(card => card.style.display = 'block');
-                } else {
-                    teacherCards.forEach(card => {
-                        const cardCategories = card.dataset.category?.split(' ') || [];
-                        card.style.display = cardCategories.includes(category) ? 'block' : 'none';
-                    });
-                }
-            });
-        });
+    }
+    
+    // 初始化
+    initFilters();
+});
+
 
         // ===== 夜间模式功能 =====
         // 创建夜间模式切换按钮
