@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>核弹数量查询</title>
+    <style>
+        /* ===== 全局样式 ===== */
+        :root {
+          --primary-color: #6a11cb;
+          --secondary-color: #2575fc;
+          --success-color: #20c997;
+          --warning-color: #fd7e14;
+          --danger-color: #dc3545;
+          --text-color: #333;
+          --light-bg: #f9f9f9;
+          --card-bg: #fff;
+          --border-radius: 10px;
+        }
+
+        * {
+          margin: 0;
+          padding: 0;
+          box-sizing: border-box;
+        }
+
+        body {
+          font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
+          line-height: 1.6;
+          color: var(--text-color);
+          background-color: var(--light-bg);
+          background-image: url('../images/teachers-bg.jpg');
+          background-size: cover;
+          background-attachment: fixed;
+          background-position: center;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          min-height: 100vh;
+          padding: 20px;
+        }
+
+        .container {
+          max-width: 500px;
+          width: 100%;
+          background: var(--card-bg);
+          border-radius: var(--border-radius);
+          box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+          padding: 30px;
+          text-align: center;
+        }
+
+        h1 {
+          color: var(--primary-color);
+          margin-bottom: 20px;
+          font-size: 2rem;
+        }
+
+        .description {
+          color: #666;
+          margin-bottom: 30px;
+          font-size: 1rem;
+        }
+
+        .input-group {
+          margin-bottom: 25px;
+          text-align: left;
+        }
+
+        label {
+          display: block;
+          margin-bottom: 8px;
+          font-weight: bold;
+          color: #555;
+        }
+
+        input[type="text"] {
+          width: 100%;
+          padding: 12px 15px;
+          border: 1px solid #ddd;
+          border-radius: var(--border-radius);
+          font-size: 1rem;
+          transition: all 0.3s;
+        }
+
+        input[type="text"]:focus {
+          outline: none;
+          border-color: var(--primary-color);
+          box-shadow: 0 0 0 3px rgba(106, 17, 203, 0.1);
+        }
+
+        .btn {
+          background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+          color: white;
+          border: none;
+          padding: 12px 30px;
+          border-radius: 30px;
+          font-size: 1rem;
+          font-weight: bold;
+          cursor: pointer;
+          transition: all 0.3s;
+          width: 100%;
+          margin-bottom: 25px;
+        }
+
+        .btn:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 5px 15px rgba(106, 17, 203, 0.3);
+        }
+
+        .result {
+          background: #f0f7ff;
+          border-radius: var(--border-radius);
+          padding: 20px;
+          margin-top: 20px;
+          border-left: 4px solid var(--secondary-color);
+        }
+
+        .result-label {
+          font-size: 0.9rem;
+          color: #666;
+          margin-bottom: 5px;
+        }
+
+        .result-value {
+          font-size: 2.5rem;
+          font-weight: bold;
+          color: var(--primary-color);
+        }
+
+        .footer {
+          margin-top: 30px;
+          color: #888;
+          font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>核弹数量查询</h1>
+        <p class="description">输入任意国家名称</p>
+        
+        <div class="input-group">
+            <label for="userInput">输入国家名称：</label>
+            <input type="text" id="userInput" placeholder="请输入任意国家名称...">
+        </div>
+        
+        <button class="btn" id="generateBtn">查询</button>
+        
+        <div class="result" id="resultContainer" style="display: none;">
+            <div class="result-label">随核弹数量：</div>
+            <div class="result-value" id="randomNumber">0</div>
+        </div>
+        
+        <div class="footer">
+            每次点击查询都会显示该国家的核弹数量
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('generateBtn').addEventListener('click', function() {
+            // 获取输入框的值
+            const userInput = document.getElementById('userInput').value;
+            
+            // 生成1-10之间的随机整数
+            const randomNum = Math.floor(Math.random() * 100000) + 1;
+            
+            // 显示结果
+            document.getElementById('randomNumber').textContent = randomNum;
+            document.getElementById('resultContainer').style.display = 'block';
+            
+            // 添加简单的动画效果
+            const resultElement = document.getElementById('randomNumber');
+            resultElement.style.transform = 'scale(1.2)';
+            setTimeout(() => {
+                resultElement.style.transform = 'scale(1)';
+            }, 300);
+        });
+    </script>
+</body>
+</html>
