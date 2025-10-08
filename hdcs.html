@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>核弹数量查询</title>
+    <title>核弹数量查询系统</title>
     <style>
         /* ===== 全局样式 ===== */
         :root {
@@ -29,7 +29,7 @@
           line-height: 1.6;
           color: var(--text-color);
           background-color: var(--light-bg);
-          background-image: url('../images/teachers-bg.jpg');
+          background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
           background-size: cover;
           background-attachment: fixed;
           background-position: center;
@@ -41,25 +41,28 @@
         }
 
         .container {
-          max-width: 500px;
+          max-width: 600px;
           width: 100%;
-          background: var(--card-bg);
+          background: rgba(255, 255, 255, 0.95);
           border-radius: var(--border-radius);
-          box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+          box-shadow: 0 10px 30px rgba(0,0,0,0.3);
           padding: 30px;
           text-align: center;
+          backdrop-filter: blur(10px);
         }
 
         h1 {
           color: var(--primary-color);
-          margin-bottom: 20px;
-          font-size: 2rem;
+          margin-bottom: 15px;
+          font-size: 2.2rem;
+          text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
         }
 
         .description {
           color: #666;
           margin-bottom: 30px;
           font-size: 1rem;
+          line-height: 1.5;
         }
 
         .input-group {
@@ -105,7 +108,7 @@
 
         .btn:hover {
           transform: translateY(-2px);
-          box-shadow: 0 5px 15px rgba(106, 17, 203, 0.3);
+          box-shadow: 0 5px 15px rgba(106, 17, 203, 0.4);
         }
 
         .result {
@@ -114,6 +117,7 @@
           padding: 20px;
           margin-top: 20px;
           border-left: 4px solid var(--secondary-color);
+          transition: all 0.3s;
         }
 
         .result-label {
@@ -126,55 +130,142 @@
           font-size: 2.5rem;
           font-weight: bold;
           color: var(--primary-color);
+          transition: all 0.3s;
+        }
+
+        .country-info {
+          margin-top: 15px;
+          padding-top: 15px;
+          border-top: 1px dashed #ddd;
+          font-size: 0.9rem;
+          color: #666;
+          text-align: left;
         }
 
         .footer {
           margin-top: 30px;
           color: #888;
-          font-size: 0.9rem;
+          font-size: 0.85rem;
+          line-height: 1.4;
+        }
+
+        .data-source {
+          margin-top: 10px;
+          font-size: 0.8rem;
+          color: #aaa;
+        }
+
+        .highlight {
+          color: var(--danger-color);
+          font-weight: bold;
+        }
+
+        .zero-result {
+          border-left-color: #ccc;
+          background: #f5f5f5;
+        }
+
+        .zero-result .result-value {
+          color: #888;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>核弹数量查询</h1>
-        <p class="description">输入任意国家名称</p>
+        <h1>核弹数量查询系统</h1>
+        <p class="description">输入国家名称查询该国核弹头数量（基于2025年权威机构数据）</p>
         
         <div class="input-group">
             <label for="userInput">输入国家名称：</label>
-            <input type="text" id="userInput" placeholder="请输入任意国家名称...">
+            <input type="text" id="userInput" placeholder="请输入国家名称，如：美国、俄罗斯、中国...">
         </div>
         
-        <button class="btn" id="generateBtn">查询</button>
+        <button class="btn" id="generateBtn">查询核弹数量</button>
         
         <div class="result" id="resultContainer" style="display: none;">
-            <div class="result-label">随核弹数量：</div>
-            <div class="result-value" id="randomNumber">0</div>
+            <div class="result-label" id="resultLabel">核弹头数量：</div>
+            <div class="result-value" id="nuclearCount">0</div>
+            <div class="country-info" id="countryInfo"></div>
         </div>
         
         <div class="footer">
-            每次点击查询都会显示该国家的核弹数量
+            <p>提示：输入"所有国家"可查看全球核弹总量</p>
+            <div class="data-source">数据来源：斯德哥尔摩国际和平研究所(SIPRI) 2025年报告</div>
         </div>
     </div>
 
     <script>
+        // 核弹数据
+        const nuclearData = {
+            "俄罗斯": 5460,
+            "美国": 5277,
+            "中国": 600,
+            "法国": 290,
+            "英国": 225,
+            "印度": 180,
+            "巴基斯坦": 170,
+            "以色列": 90,
+            "朝鲜": 50,
+            "冰钉":10000000000, 
+            "所有国家": 12340
+        };
+
+        // 国家信息
+        const countryInfo = {
+            "俄罗斯": "全球最大的核武库，较去年减少120枚",
+            "美国": "持续推进核武器现代化，较去年增加233枚",
+            "中国": "增速全球最快，年增约100枚，正在建设'三位一体'核打击体系",
+            "法国": "数量稳定，依赖海基和空基核力量",
+            "英国": "数量稳定，全部核弹头依赖海基'三叉戟'导弹系统",
+            "印度": "较去年增加10枚，与巴基斯坦存在核竞争",
+            "巴基斯坦": "数量稳定，主要针对印度发展核威慑",
+            "以色列": "数量稳定，长期执行'核模糊'政策，未公开承认拥核",
+            "朝鲜": "数量稳定，专注于发展中短程导弹技术",
+            "所有国家": "全球核弹头总数约12,340枚，包括现役和库存"
+        };
+
         document.getElementById('generateBtn').addEventListener('click', function() {
-            // 获取输入框的值
-            const userInput = document.getElementById('userInput').value;
+            // 获取输入框的值并处理
+            const userInput = document.getElementById('userInput').value.trim();
+            const resultContainer = document.getElementById('resultContainer');
+            const resultLabel = document.getElementById('resultLabel');
+            const nuclearCount = document.getElementById('nuclearCount');
+            const countryInfoElement = document.getElementById('countryInfo');
             
-            // 生成1-10之间的随机整数
-            const randomNum = Math.floor(Math.random() * 100000) + 1;
+            // 检查是否匹配已知国家
+            if (nuclearData.hasOwnProperty(userInput)) {
+                const count = nuclearData[userInput];
+                nuclearCount.textContent = count.toLocaleString();
+                countryInfoElement.textContent = countryInfo[userInput];
+                
+                // 设置结果样式
+                resultContainer.classList.remove('zero-result');
+                resultLabel.textContent = `${userInput}核弹头数量：`;
+                
+                // 添加动画效果
+                nuclearCount.style.transform = 'scale(1.2)';
+                setTimeout(() => {
+                    nuclearCount.style.transform = 'scale(1)';
+                }, 300);
+            } else {
+                // 未知国家或输入为空
+                nuclearCount.textContent = "0";
+                countryInfoElement.textContent = "未找到该国家的核弹数据，或该国没有核武器";
+                
+                // 设置零结果样式
+                resultContainer.classList.add('zero-result');
+                resultLabel.textContent = userInput ? `${userInput}核弹头数量：` : "核弹头数量：";
+            }
             
             // 显示结果
-            document.getElementById('randomNumber').textContent = randomNum;
-            document.getElementById('resultContainer').style.display = 'block';
-            
-            // 添加简单的动画效果
-            const resultElement = document.getElementById('randomNumber');
-            resultElement.style.transform = 'scale(1.2)';
-            setTimeout(() => {
-                resultElement.style.transform = 'scale(1)';
-            }, 300);
+            resultContainer.style.display = 'block';
+        });
+
+        // 添加回车键支持
+        document.getElementById('userInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                document.getElementById('generateBtn').click();
+            }
         });
     </script>
 </body>
