@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>鸡巴长度查询系统 · 权限版</title>
+    <style>
+        /* ===== 继承原风格，微调为阳刚红黑 ===== */
+        :root {
+          --primary-color: #b03a3a;        /* 深红色，更有警告感 */
+          --secondary-color: #8b2c2c;
+          --success-color: #20c997;
+          --warning-color: #fd7e14;
+          --danger-color: #b02e2e;
+          --text-color: #333;
+          --light-bg: #f9f9f9;
+          --card-bg: #fff;
+          --border-radius: 10px;
+        }
+
+        * {
+          margin: 0;
+          padding: 0;
+          box-sizing: border-box;
+        }
+
+        body {
+          font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
+          line-height: 1.6;
+          color: var(--text-color);
+          background: linear-gradient(135deg, #1f1212 0%, #2e1b1b 100%);
+          background-attachment: fixed;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          min-height: 100vh;
+          padding: 20px;
+        }
+
+        .container {
+          max-width: 600px;
+          width: 100%;
+          background: rgba(255, 255, 255, 0.96);
+          border-radius: var(--border-radius);
+          box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+          padding: 30px;
+          text-align: center;
+          backdrop-filter: blur(8px);
+        }
+
+        h1 {
+          color: var(--primary-color);
+          margin-bottom: 15px;
+          font-size: 2.2rem;
+          letter-spacing: 1px;
+          text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+
+        .description {
+          color: #666;
+          margin-bottom: 30px;
+          font-size: 1rem;
+          border-left: 3px solid #b03a3a;
+          background: #f9ecec;
+          padding: 8px 12px;
+          border-radius: 6px;
+        }
+
+        .input-group {
+          margin-bottom: 25px;
+          text-align: left;
+        }
+
+        label {
+          display: block;
+          margin-bottom: 8px;
+          font-weight: bold;
+          color: #444;
+        }
+
+        input[type="text"] {
+          width: 100%;
+          padding: 12px 15px;
+          border: 1px solid #ddd;
+          border-radius: var(--border-radius);
+          font-size: 1rem;
+          transition: all 0.3s;
+        }
+
+        input[type="text"]:focus {
+          outline: none;
+          border-color: var(--primary-color);
+          box-shadow: 0 0 0 3px rgba(176, 58, 58, 0.15);
+        }
+
+        .btn {
+          background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+          color: white;
+          border: none;
+          padding: 12px 30px;
+          border-radius: 30px;
+          font-size: 1rem;
+          font-weight: bold;
+          cursor: pointer;
+          transition: all 0.3s;
+          width: 100%;
+          margin-bottom: 20px;
+          letter-spacing: 0.5px;
+        }
+
+        .btn:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 5px 15px rgba(176, 58, 58, 0.4);
+        }
+
+        .result {
+          background: #fef7f7;
+          border-radius: var(--border-radius);
+          padding: 20px;
+          margin-top: 15px;
+          border-left: 4px solid var(--primary-color);
+          transition: all 0.3s;
+        }
+
+        .result-label {
+          font-size: 0.95rem;
+          color: #555;
+          margin-bottom: 5px;
+          font-weight: 500;
+        }
+
+        .result-value {
+          font-size: 2.6rem;
+          font-weight: bold;
+          color: var(--primary-color);
+          transition: transform 0.2s;
+          word-break: break-word;
+        }
+
+        .privilege-note {
+          margin-top: 15px;
+          padding-top: 15px;
+          border-top: 1px dashed #d0b4b4;
+          font-size: 0.95rem;
+          color: #a15858;
+          text-align: left;
+          background: #fff0f0;
+          padding: 10px;
+          border-radius: 8px;
+        }
+
+        .footer {
+          margin-top: 30px;
+          color: #888;
+          font-size: 0.85rem;
+          line-height: 1.5;
+        }
+
+        .data-source {
+          margin-top: 10px;
+          font-size: 0.8rem;
+          color: #aaa;
+          font-style: italic;
+        }
+
+        .warning-tip {
+          color: #b03a3a;
+          font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📏 鸡巴长度查询器</h1>
+        <p class="description">⚡ 隐私保护模式 · 仅限本人查询，他人无权访问</p>
+        
+        <div class="input-group">
+            <label for="userInput">🔍 输入姓名：</label>
+            <input type="text" id="userInput" placeholder="例如：李昊泽 或 你自己" autocomplete="off">
+        </div>
+        
+        <button class="btn" id="queryBtn">查询鸡巴长度</button>
+        
+        <!-- 结果卡片：始终隐藏直到查询 -->
+        <div class="result" id="resultContainer" style="display: none;">
+            <div class="result-label" id="resultLabel">⚖️ 查询结果</div>
+            <div class="result-value" id="lengthDisplay">——</div>
+            <div class="privilege-note" id="privilegeMessage"></div>
+        </div>
+        
+        <div class="footer">
+            <p><span class="warning-tip">⚠️ 注意：</span> 输入“李昊泽”会触发特殊回应，其他人无权查看数据。</p>
+            <div class="data-source">🔒 伦理审查委员会 · 第2502号禁令</div>
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            // 获取DOM元素
+            const userInput = document.getElementById('userInput');
+            const queryBtn = document.getElementById('queryBtn');
+            const resultContainer = document.getElementById('resultContainer');
+            const resultLabel = document.getElementById('resultLabel');
+            const lengthDisplay = document.getElementById('lengthDisplay');
+            const privilegeMessage = document.getElementById('privilegeMessage');
+
+            // 核心功能：查询处理
+            function handleQuery() {
+                const inputName = userInput.value.trim();
+
+                // 如果输入为空，给出提示并返回（但不弹出alert，友好处理）
+                if (inputName === '') {
+                    // 显示结果区，提示输入不能为空
+                    resultContainer.style.display = 'block';
+                    resultLabel.textContent = '⚠️ 提示';
+                    lengthDisplay.textContent = '——';
+                    privilegeMessage.innerHTML = '请输入一个名字后再查询。';
+                    // 样式微调
+                    resultContainer.style.borderLeftColor = '#b03a3a';
+                    return;
+                }
+
+                // ===== 关键逻辑 =====
+                // 如果输入“李昊泽”（完全匹配，忽略大小写和空格？这里使用trim后直接比较）
+                if (inputName === '李昊泽') {
+                    // 弹出文字“没有”
+                    alert('没有');   // 原要求：输入李昊泽时弹出文字“没有”
+
+                    // 同时也在结果区展示更详细的信息（可选，保持界面反馈）
+                    resultContainer.style.display = 'block';
+                    resultLabel.textContent = `针对 “${inputName}” 的查询结果：`;
+                    lengthDisplay.textContent = '❌ 无';
+                    privilegeMessage.innerHTML = '🔍 系统内部备注：根据隐私条例，不予显示任何长度。';
+                    resultContainer.style.borderLeftColor = '#b03a3a';
+                } 
+                else {
+                    // 输入其他任何内容 —— 提示没有权限
+                    // 这里按照要求：“输入其他内容的时候提示你没有权限查询其他人的鸡巴”
+                    // 使用 alert 弹窗 + 界面友好提示 (双重保险)
+                    alert('你没有权限查询其他人的鸡巴');
+
+                    // 更新结果区域
+                    resultContainer.style.display = 'block';
+                    resultLabel.textContent = `🔐 权限不足`;
+                    lengthDisplay.textContent = '🚫 禁止访问';
+                    privilegeMessage.innerHTML = `您尝试查询 <strong>“${inputName}”</strong> 的鸡巴长度。<br>⛔ 根据《鸡巴隐私法》，你无权查看他人的私密数据。`;
+                    resultContainer.style.borderLeftColor = '#b03a3a';
+                }
+
+                // 添加一点点动画 (参照原作)
+                lengthDisplay.style.transform = 'scale(1.1)';
+                setTimeout(() => {
+                    lengthDisplay.style.transform = 'scale(1)';
+                }, 200);
+            }
+
+            // 绑定点击事件
+            queryBtn.addEventListener('click', handleQuery);
+
+            // 绑定回车键
+            userInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();  // 防止意外提交
+                    handleQuery();
+                }
+            });
+
+            // 附加：输入框获得焦点时若结果区显示，可不清除，但体验优化（点击后方便重新输入）
+            // 无额外逻辑
+        })();
+    </script>
+</body>
+</html>
