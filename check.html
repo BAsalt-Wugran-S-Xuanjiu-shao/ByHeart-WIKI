@@ -189,8 +189,8 @@
         </div>
         
         <div class="footer">
-            <p><span class="warning-tip">⚠️ 注意：</span> 输入“李昊泽”会触发特殊回应，其他人无权查看数据。</p>
-            <div class="data-source">🔒 伦理审查委员会 · 第2502号禁令</div>
+            <p><span class="warning-tip">⚠️ 注意：</span> 仅本人可以查看，他人无权查看。</p>
+            <div class="data-source">🔒 🐔🐔委员会 · 第2502号禁令</div>
         </div>
     </div>
 
@@ -223,8 +223,6 @@
                 // ===== 关键逻辑 =====
                 // 如果输入“李昊泽”（完全匹配，忽略大小写和空格？这里使用trim后直接比较）
                 if (inputName === '李昊泽') {
-                    // 弹出文字“没有”
-                    alert('没有');   // 原要求：输入李昊泽时弹出文字“没有”
 
                     // 同时也在结果区展示更详细的信息（可选，保持界面反馈）
                     resultContainer.style.display = 'block';
@@ -234,11 +232,6 @@
                     resultContainer.style.borderLeftColor = '#b03a3a';
                 } 
                 else {
-                    // 输入其他任何内容 —— 提示没有权限
-                    // 这里按照要求：“输入其他内容的时候提示你没有权限查询其他人的鸡巴”
-                    // 使用 alert 弹窗 + 界面友好提示 (双重保险)
-                    alert('你没有权限查询其他人的鸡巴');
-
                     // 更新结果区域
                     resultContainer.style.display = 'block';
                     resultLabel.textContent = `🔐 权限不足`;
