@@ -231,6 +231,25 @@
                     privilegeMessage.innerHTML = '🔍 系统内部备注：很小，可以忽略不计。';
                     resultContainer.style.borderLeftColor = '#b03a3a';
                 } 
+                
+if (inputName === '聪明人') {
+
+                    // 同时也在结果区展示更详细的信息（可选，保持界面反馈）
+                    resultContainer.style.display = 'block';
+                    resultLabel.textContent = `针对 “${inputName}” 的查询结果：`;
+                    lengthDisplay.textContent = '❌ 无';
+                    privilegeMessage.innerHTML = '🔍 系统内部备注：根据隐私条例，不予显示任何长度。';
+                    resultContainer.style.borderLeftColor = '#b03a3a';
+                } 
+if (inputName === '周铭泽') {
+
+                    // 同时也在结果区展示更详细的信息（可选，保持界面反馈）
+                    resultContainer.style.display = 'block';
+                    resultLabel.textContent = `针对 “${inputName}” 的查询结果：`;
+                    lengthDisplay.textContent = '比你大';
+                    privilegeMessage.innerHTML = '自己去吃就知道了👊👊';
+                    resultContainer.style.borderLeftColor = '#b03a3a';
+                }
                 else {
                     // 更新结果区域
                     resultContainer.style.display = 'block';
