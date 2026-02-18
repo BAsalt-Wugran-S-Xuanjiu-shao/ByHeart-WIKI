@@ -176,7 +176,7 @@
         
         <div class="input-group">
             <label for="userInput">🔍 输入姓名：</label>
-            <input type="text" id="userInput" placeholder="例如：李昊泽 或 你自己" autocomplete="off">
+            <input type="text" id="userInput" placeholder="输入自己的名字，请不要输入其他人的名字" autocomplete="off">
         </div>
         
         <button class="btn" id="queryBtn">查询鸡巴长度</button>
@@ -228,7 +228,7 @@
                     resultContainer.style.display = 'block';
                     resultLabel.textContent = `针对 “${inputName}” 的查询结果：`;
                     lengthDisplay.textContent = '❌ 无';
-                    privilegeMessage.innerHTML = '🔍 系统内部备注：根据隐私条例，不予显示任何长度。';
+                    privilegeMessage.innerHTML = '🔍 系统内部备注：很小，可以忽略不计。';
                     resultContainer.style.borderLeftColor = '#b03a3a';
                 } 
                 else {
